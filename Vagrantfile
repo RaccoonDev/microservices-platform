@@ -1,23 +1,20 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
 Vagrant.configure("2") do |config|
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
+  ip_prefix = '172.0.0.'
+
   config.vm.box = "ubuntu/xenial64"
+  config.vm.provision "docker"
+  config.vm.provision "shell", path: "provision/install.consul.sh", privileged: false
 
-  # Disable automatic box update checking. If you disable this, then
-  # boxes will only be checked for updates when the user runs
-  # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
+  # Defining one consul server for now
+  config.vm.define "dc1-consul-server-1" do |cs|
+    cs.vm.hostname = "dc1-consul-server-1"
+    cs.vm.network "private_network", ip: "#{ip_prefix}31"
+    cs.vm.provision "shell", path: "provision/setup.consul-server.sh", privileged: false
+  end
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
