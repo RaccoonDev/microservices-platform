@@ -31,7 +31,7 @@
 			"boot_wait": "10s",
 			"disk_size": 81920,
 			"guest_os_type": "Ubuntu_64",
-			"headless": false,
+			"headless": true,
 			"http_directory": "http",
 			"iso_urls": [
 				"iso/ubuntu-16.04.1-server-amd64.iso",
@@ -43,8 +43,8 @@
 			"ssh_password": "vagrant",
 			"ssh_port": 22,
 			"ssh_wait_timeout": "10000s",
-			"shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
-			"guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+			"shutdown_command": "sudo -S shutdown -P now",
+			"guest_additions_path": "VBoxGuestAdditions.iso",
 			"virtualbox_version_file": ".vbox_version",
 			"vm_name": "packer-ubuntu-16.04-amd64",
 			"vboxmanage": [
@@ -67,25 +67,36 @@
 		{
 			"type": "shell",
 			"scripts": [
-					"provision/virtualbox.sh"
+					"provision/virtualbox.sh",
+					"provision/vagrant.sh"
 			],
-			"execute_command": "echo 'vagrant' | sudo -S -E bash '{{.Path}}'",
+			"execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
 			"only": ["virtualbox-iso"]
 		},
 		{
 			"type": "shell",
-			"execute_command": "echo 'vagrant' | sudo -S -E bash '{{.Path}}'",
+			"execute_command": "sudo -S -E bash '{{.Path}}'",
 			"script": "provision/ansible.sh"
+		},
+		{
+			"type": "shell",
+			"inline": ["mkdir /tmp/upload"]
 		},
 		{
 			"type": "file",
 			"source": "ToUpload/",
-			"destination": "/tmp"
+			"destination": "/tmp/upload"
+		},
+
+		{
+			"type": "shell",
+			"execute_command": "sudo -S -E bash '{{.Path}}'",
+			"script": "provision/docker.install.sh"
 		},
 		{
 			"type": "shell",
-			"execute_command": "echo 'vagrant' | sudo -S -E bash '{{.Path}}'",
-			"script": "provision/docker.install.sh"
+			"execute_command": "sudo -S -E bash '{{.Path}}'",
+			"script": "provision/setup.sh"
 		}
 	],
 	"post-processors": [
@@ -96,7 +107,7 @@
 		},
 		{
 			"type": "vagrant",
-			"output": "{{.Provider}}-GenericUbuntuServer.box",
+			"output": "GenericUbuntuServer-{{.Provider}}.box",
 			"only": ["virtualbox-iso"]
 		}
 	]
