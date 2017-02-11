@@ -6,15 +6,13 @@ Vagrant.configure("2") do |config|
   ip_prefix = '172.0.0.'
 
   config.vm.box = "packer/GenericUbuntuServer-virtualbox.box"
-  # config.vm.provision "shell", path: "provision/install.consul.sh", privileged: false
-  # config.ssh.username = "vagrant"
-  # config.ssh.password = "vagrant"
 
   # Defining one consul server for now
   config.vm.define "dc1-consul-server-1" do |cs|
     cs.vm.hostname = "dc1-consul-server-1"
     cs.vm.network "private_network", ip: "#{ip_prefix}31"
-    # cs.vm.provision "shell", path: "provision/setup.consul-server.sh", privileged: false
+    # change consul configuration advertise_addr
+    cs.vm.provision "shell", inline: "cat /etc/consul.d/bootstrap/config.json | jq 'to_entries | map(if .key == \"advertise_addr\" then . + {\"value\":\"#{ip_prefix}31\"} else . end ) | from_entries' > /etc/consul.d/bootstrap/config.json"
   end
 
   # Create a forwarded port mapping which allows access to a specific port

@@ -36,15 +36,20 @@ You can find all provision and template files for packer in "packer" folder.
 consul installation on the machine is datacenter aware. It takes datacenter name from hostname by stripping part of the string
 before first "-". e.g. "dc1-consul-server-1" will be treated from "dc1" datacenter.
 
+Consul must know advertise address to use, so server can start. The service is configured to read
+the IP address from environment variable $CONSUL\_ADV\_IP
+
 Notes: running packer to build GUS from iso took much more time than I expected.
        Total OS installation time on my notebook takes about 20 minutes.
 
 todo list:
 [X] Switch on using vagrant ssh key instead of password
 [X] Setup consul in image
+[ ] Change consul startup from upstart to systemd
 [ ] Setup nomad in image
 [ ] Create GUS in Azure
 [ ] Make vagrant boxes versioned
+[ ] Configure consul encryption
 
 ### Generic Windows Server (GWS)
 

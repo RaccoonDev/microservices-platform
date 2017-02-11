@@ -1,9 +1,9 @@
 #!/bin/bash -eux
 
-apt-get install -y upstart curl unzip bc stress
+sudo apt-get install -y upstart curl unzip bc stress vim jq
 
 # Disable daily apt unattended updates.
-echo 'APT::Periodic::Enable "0";' >> /etc/apt/apt.conf.d/10periodic
+#echo 'APT::Periodic::Enable "0";' >> /etc/apt/apt.conf.d/10periodic
 
 # Setup coloring in console
 cat >> /home/vagrant/.bashrc <<"END"
@@ -18,30 +18,31 @@ PS1="$DARKGRAY\u@$BOLD$BLUE\h$DARKGRAY:\w\$ $NORMAL"
 END
 
 # Download consul
-CONSUL_VERSION=0.7.3
-curl https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip -o consul.zip
+CONSUL_VERSION=0.7.4
+curl -s https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip -o consul.zip
 
 # Install consul
 unzip consul.zip
 sudo chmod +x consul
 sudo mv consul /usr/bin/consul
 
+# Create consul user
+sudo useradd -r -s /bin/false consul
+
 # Create config directory
-sudo mkdir /etc/consul.d
-sudo chmod a+w /etc/consul.d
-sudo mkdir /etc/consul.d/server
-sudo chmod a+w /etc/consul.d/server
-sudo mkdir /etc/consul.d/client
-sudo chmod a+w /etc/consul.d/client
+sudo mkdir -p /etc/consul.d/{bootstrap,server,client}
+sudo cp /tmp/upload/consul.d/server/* /etc/consul.d/server
+sudo cp /tmp/upload/consul.d/client/* /etc/consul.d/client
+sudo cp /tmp/upload/consul.d/bootstrap/* /etc/consul.d/client/bootstrap
 
-# Install common consul config
-sudo cp /tmp/upload/common-consul.d/* /etc/consul.d
+# Create consul data directory
+sudo mkdir -p /var/consul
+sudo chown consul:consul /var/consul
 
-# Install consul server configuration
-sudo cp /tmp/upload/server-consul.d/* /etc/consul.d/server
+# Configure systemd
+sudo mkdir /etc/sysconfig
+sudo cp /tmp/upload/systemd/consul.service /etc/systemd/system/
+sudo cp /tmp/upload/systemd/consul.environment /etc/sysconfig/consul
 
-# Install consul client configuration
-sudo cp /tmp/upload/client-consul.d/* /etc/consul.d/client
-
-# Install upstart job
-sudo cp /tmp/upload/upstart/consul.conf /etc/init/.
+sudo systemctl enable consul
+sudo systemctl start consul
