@@ -1,6 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+$setAdvertiseIpScript = <<SCRIPT
+cat /etc/consul.d/bootstrap/config.json | jq 'to_entries | map(if .key == "advertise_addr" then . + {"value":"$1"} else . end ) | from_entries' > /etc/consul.d/bootstrap/config.json
+SCRIPT
+
+
 Vagrant.configure("2") do |config|
 
   ip_prefix = '172.0.0.'
@@ -12,7 +17,11 @@ Vagrant.configure("2") do |config|
     cs.vm.hostname = "dc1-consul-server-1"
     cs.vm.network "private_network", ip: "#{ip_prefix}31"
     # change consul configuration advertise_addr
-    cs.vm.provision "shell", inline: "cat /etc/consul.d/bootstrap/config.json | jq 'to_entries | map(if .key == \"advertise_addr\" then . + {\"value\":\"#{ip_prefix}31\"} else . end ) | from_entries' > /etc/consul.d/bootstrap/config.json"
+    cs.vm.provision "shell" do |s| 
+      s.inline = $setAdvertiseIpScript
+      s.args = ["#{ip_prefix}31"]
+      s.privileged = true
+    end
   end
 
   # Create a forwarded port mapping which allows access to a specific port

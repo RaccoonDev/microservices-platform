@@ -33,7 +33,7 @@ sudo useradd -r -s /bin/false consul
 sudo mkdir -p /etc/consul.d/{bootstrap,server,client}
 sudo cp /tmp/upload/consul.d/server/* /etc/consul.d/server
 sudo cp /tmp/upload/consul.d/client/* /etc/consul.d/client
-sudo cp /tmp/upload/consul.d/bootstrap/* /etc/consul.d/client/bootstrap
+sudo cp /tmp/upload/consul.d/bootstrap/* /etc/consul.d/bootstrap
 
 # Create consul data directory
 sudo mkdir -p /var/consul

@@ -1,5 +1,5 @@
 #!/bin/bash -e
-apt-get install -y linux-headers-$(uname -r) build-essential dkms
+apt-get install -y linux-headers-$(uname -r) build-essential dkms virtualbox-guest-utils
 
 cd /tmp
 mkdir /tmp/isomount
