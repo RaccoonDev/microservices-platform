@@ -1,3 +1,4 @@
 *.box
 *.tar.gz
 packer_cache/
+azure-vars.json
