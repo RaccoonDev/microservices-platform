@@ -42,15 +42,16 @@ change consul start options with systemd environment file.
 Notes: running packer to build GUS from iso took much more time than I expected.
        Total OS installation time on my notebook takes about 20 minutes.
 
-todo list:
-[X] Switch on using vagrant ssh key instead of password
-[X] Setup consul in image
-[X] Change consul startup from upstart to systemd
-[X] Setup nomad in image
-[ ] Create GUS in Azure
-[ ] Make vagrant boxes versioned
-[ ] Configure consul encryption
-
 ### Generic Windows Server (GWS)
 
 Probably I will need this one someday as well.
+
+## todo list
+
+* [X] Switch on using vagrant ssh key instead of password
+* [X] Setup consul in image
+* [X] Change consul startup from upstart to systemd
+* [X] Setup nomad in image
+* [ ] Create GUS in Azure
+* [ ] Make vagrant boxes versioned
+* [ ] Configure consul encryption
