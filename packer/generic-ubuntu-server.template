@@ -1,6 +1,13 @@
 {
 	"variables": {
-		"azure_subsciption_id": ""
+		"azure_client_id": "",
+		"azure_client_secret": "",
+		"azure_subsciption_id": "",
+		"azure_resource_group_name": "",
+		"azure_tenant_id": "",
+		"azure_vm_size": "",
+		"azure_location": "",
+		"azure_storage_account_name": ""
 	},
 	"builders": [
 		{
@@ -68,12 +75,12 @@
 		{
 			"type": "azure-arm",
 
-			"client_id": "fe354398-d7sf-4dc9-87fd-c432cd8a7e09",
-			"client_secret": "uGBzJxc/0NgNkbC05OErvkMdm+MVZ1D+VPZTiX+wU0U=",
-			"resource_group_name": "dr-microservices",
-			"storage_account": "virtualmachines",
-			"subscription_id": "44cae533-4247-4093-42cf-897ded6e7823",
-			"tenant_id": "de39842a-caba-497e-a798-7896aea43218",
+			"client_id": "{{user `azure_client_id`}}",
+			"client_secret": "{{user `azure_client_secret`}}",
+			"resource_group_name": "{{user `azure_resource_group_name`}}",
+			"storage_account": "{{user `azure_storage_account_name`}}",
+			"subscription_id": "{{user `azure_subsciption_id`}}",
+			"tenant_id": "{{user `azure_tenant_id`}}",
 
 			"capture_container_name": "images",
 			"capture_name_prefix": "packer",
@@ -81,14 +88,14 @@
 			"os_type": "Linux",
 			"image_publisher": "Canonical",
 			"image_offer": "UbuntuServer",
-			"image_sku": "14.04.4-LTS",
+			"image_sku": "16.04-LTS",
 
 			"azure_tags": {
-			"dept": "engineering"
+				"dept": "engineering"
 			},
 
-			"location": "West US",
-			"vm_size": "Standard_A2"
+			"location": "{{user `azure_location`}}",
+			"vm_size": "{{user `azure_vm_size`}}"
 		}
 	],
 	"provisioners": [

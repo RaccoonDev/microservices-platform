@@ -46,6 +46,11 @@ Notes: running packer to build GUS from iso took much more time than I expected.
 
 Probably I will need this one someday as well.
 
+## Azure setup
+
+Here is the great explanation and step-by-step instruction from packer docs on how to get all required data to run azure-arm builder.
+<https://www.packer.io/docs/builders/azure-setup.html>
+
 ## todo list
 
 * [X] Switch on using vagrant ssh key instead of password
@@ -55,3 +60,7 @@ Probably I will need this one someday as well.
 * [ ] Create GUS in Azure
 * [ ] Make vagrant boxes versioned
 * [ ] Configure consul encryption
+
+## Some links to check
+
+<http://datalinks.nl/wordpress/?page_id=1447>
