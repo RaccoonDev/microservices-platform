@@ -1,8 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$setAdvertiseIpScript = <<SCRIPT
-cat /etc/consul.d/bootstrap/config.json | jq 'to_entries | map(if .key == "advertise_addr" then . + {"value":"$1"} else . end ) | from_entries' > /etc/consul.d/bootstrap/config.json
+$setConsulStartParameters = <<SCRIPT
+echo "OPTIONS=\"$1\"" > /etc/sysconfig/consul
 SCRIPT
 
 
@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
     cs.vm.network "private_network", ip: "#{ip_prefix}31"
     # change consul configuration advertise_addr
     cs.vm.provision "shell" do |s| 
-      s.inline = $setAdvertiseIpScript
+      s.inline = $setConsulStartParameters
       s.args = ["#{ip_prefix}31"]
       s.privileged = true
     end

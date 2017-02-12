@@ -96,7 +96,17 @@
 		{
 			"type": "shell",
 			"execute_command": "sudo -S -E bash '{{.Path}}'",
-			"script": "provision/setup.sh"
+			"script": "provision/setup_common.sh"
+		},
+		{
+			"type": "shell",
+			"execute_command": "sudo -S -E bash '{{.Path}}'",
+			"script": "provision/setup_consul.sh"
+		},
+		{
+			"type": "shell",
+			"execute_command": "sudo -S -E bash '{{.Path}}'",
+			"script": "provision/setup_nomad.sh"
 		}
 	],
 	"post-processors": [

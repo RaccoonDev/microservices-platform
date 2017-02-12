@@ -1,5 +1,4 @@
 {
-    "advertise_addr": "",
     "bootstrap": true,
     "datacenter": "dc1",
     "server": true,

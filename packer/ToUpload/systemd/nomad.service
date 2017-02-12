@@ -1,14 +1,14 @@
 [Unit]
-Description=consul agent
+Description=nomad agent
 Requires=network-online.target
 After=network-online.target
 
 [Service]
-User=consul
-EnvironmentFile=-/etc/sysconfig/consul
+User=nomad
+EnvironmentFile=-/etc/sysconfig/nomad
 Environment=GOMAXPROCS=2
 Restart=on-failure
-ExecStart=/usr/bin/consul agent -config-file=/etc/consul.d/bootstrap/config.json $OPTIONS
+ExecStart=/usr/bin/nomad agent $OPTIONS
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 
